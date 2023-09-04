@@ -1,4 +1,5 @@
 import streamlit as st
+import preprocess
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -7,4 +8,5 @@ if ChatFile is not None:
     byte_data = ChatFile.getvalue()
     Chats = byte_data.decode('utf-8')
     # This is a kind of reading the file
-    st.text(Chats)
+    Chats = preprocess.PreProcess(Chats)
+    st.dataframe(Chats)
