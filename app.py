@@ -10,3 +10,12 @@ if ChatFile is not None:
     # This is a kind of reading the file
     Chats = preprocess.PreProcess(Chats)
     st.dataframe(Chats)
+
+    # Users List
+    users = Chats['Sender'].unique().tolist()
+    users.remove("Notification")
+    users.sort()
+    users.insert(0,"Overall")
+
+    st.sidebar.selectbox("Analysis wrt", users)
+    st.sidebar.button("Analyse")
