@@ -1,7 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
-from helper import fetch_stats, busyUsers
+from helper import fetch_stats, busyUsers, create_wordCloud
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -44,3 +44,9 @@ if ChatFile is not None:
                 st.pyplot(fig)
             with table_col :
                 st.dataframe(tabel_data)
+
+        st.title("Word Cloud :")
+        wrdcld = create_wordCloud(Chats, selected)
+        fig, ax = plt.subplots()
+        ax.imshow(wrdcld)
+        st.pyplot(fig)

@@ -34,3 +34,15 @@ def busyUsers(Chat, count_size=7):
     BusyUsers  = Chat.Sender.value_counts().head(count_size)
     ChatTable = round((Chat.Sender.value_counts()/Chat.shape[0])*100,2).reset_index().rename(columns = {'count':"Percent"})
     return BusyUsers, ChatTable
+
+def create_wordCloud(chats, user):
+    from wordcloud import WordCloud
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+    
+    # Removing all media the 
+    chats.drop(chats[chats.Message == '<Media omitted>\n'].index, inplace= True)
+
+    wc = WordCloud(height=400, width=500, min_font_size=12, background_color='white')
+    wrdlcd = wc.generate(chats['Message'].str.cat(sep=' '))
+    return wrdlcd
