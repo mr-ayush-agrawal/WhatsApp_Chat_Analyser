@@ -34,8 +34,9 @@ def fetch_stats(user, chats):
     return (num_messages, num_words,num_media,num_links)
 
 def busyUsers(Chat, count_size=7):
+    Chat.drop(Chat[Chat['Sender']=='Notification'].index, inplace = True)
     BusyUsers  = Chat.Sender.value_counts().head(count_size)
-    ChatTable = round((Chat.Sender.value_counts()/Chat.shape[0])*100,2).reset_index().rename(columns = {'count':"Percent"})
+    ChatTable = round((Chat.Sender.value_counts()/Chat.shape[0])*100,2).reset_index().rename(columns = {'count':"Percent of Message"})
     return BusyUsers, ChatTable
 
 def create_wordCloud(chats, user):
