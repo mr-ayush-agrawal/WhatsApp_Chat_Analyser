@@ -1,7 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
-from helper import fetch_stats, busyUsers, create_wordCloud
+from pandas import DataFrame
+from helper import fetch_stats, busyUsers, create_wordCloud,most_common
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -49,4 +50,14 @@ if ChatFile is not None:
         wrdcld = create_wordCloud(Chats, selected)
         fig, ax = plt.subplots()
         ax.imshow(wrdcld)
+        st.pyplot(fig)
+
+        # Most Common Words
+        st.header('Most Common Words')
+        word_count = most_common(Chats, selected)
+        word_count = DataFrame(word_count.most_common(25))
+        word_count.rename(columns={0:'Words', 1:'Frequency'}, inplace= True)
+
+        fig,ax = plt.subplots()
+        ax.barh(word_count['Words'],word_count['Frequency'])
         st.pyplot(fig)

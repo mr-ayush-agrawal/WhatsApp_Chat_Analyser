@@ -50,3 +50,22 @@ def create_wordCloud(chats, user):
     wc = WordCloud(height=360, width=550, min_font_size=12, background_color='white')
     wrdlcd = wc.generate(chats['Message'].str.cat(sep=' '))
     return wrdlcd
+
+def most_common(chats, user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    f = open('stopwords_hinglish.txt', 'r')
+    stpwrds = f.read().split('\n')
+    f.close()
+
+    words = []
+    for msg in chats['Message'] :
+        if msg == '<media omitted>\n':
+            continue
+        for wrd in str(msg).lower().split():
+            if wrd not in stpwrds:
+                words.append(wrd)
+    from collections import Counter
+    ct = Counter(words)
+    return ct
