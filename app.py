@@ -33,4 +33,6 @@ if ChatFile is not None:
         with cols[2]:
             st.header('Media Files Shared')
             st.title(stats[2])
-        
+        with cols[3]:
+            st.header('Links Shared')
+            st.title(stats[3])
