@@ -20,10 +20,10 @@ def PreProcess(Chats):
         ent = re.split('([\w\W]+?):\s', msg)
         if ent[1:] :            # If having any sender
             Senders.append(ent[1])
-            Messages.append(ent[2])
+            Messages.append(ent[2].lower())
         else :
             Senders.append("Notification")
-            Messages.append(ent[0])
+            Messages.append(ent[0].lower())
 
     Data['Sender']  = Senders
     Data['Message'] = Messages
