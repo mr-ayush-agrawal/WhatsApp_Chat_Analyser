@@ -1,5 +1,6 @@
 import streamlit as st
 import preprocess
+from helper import fetch_stats
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -17,5 +18,16 @@ if ChatFile is not None:
     users.sort()
     users.insert(0,"Overall")
 
-    st.sidebar.selectbox("Analysis wrt", users)
-    st.sidebar.button("Analyse")
+    selected = st.sidebar.selectbox("Analysis wrt", users)
+
+    stats = fetch_stats(selected, Chats)
+
+    if st.sidebar.button("Analyse") :
+        cols = st.columns(5)
+        with cols[0] :
+            st.header("Total Messages")
+            st.title(stats[0])
+        with cols[1] :
+            st.header("Total Words Typed")
+            st.title(stats[1])
+        
