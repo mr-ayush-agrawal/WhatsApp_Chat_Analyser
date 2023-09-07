@@ -32,4 +32,5 @@ def fetch_stats(user, chats):
 
 def busyUsers(Chat, count_size=7):
     BusyUsers  = Chat.Sender.value_counts().head(count_size)
-    return BusyUsers
+    ChatTable = round((Chat.Sender.value_counts()/Chat.shape[0])*100,2).reset_index().rename(columns = {'count':"Percent"})
+    return BusyUsers, ChatTable

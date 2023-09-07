@@ -34,11 +34,13 @@ if ChatFile is not None:
         # Most Active users -> Only for group Chat
         if selected == 'Overall' :
             st.title('Top Chatist Users :')
-            busy = busyUsers(Chats)
+            chart_data, tabel_data = busyUsers(Chats)
             # Making 2 Section -> For chart and Table
             chart_col, table_col = st.columns(2)
             with chart_col :
                 fig, ax = plt.subplots()
-                ax.bar(busy.index, busy.values)
+                ax.bar(chart_data.index, chart_data.values)
                 plt.xticks(rotation=60)
                 st.pyplot(fig)
+            with table_col :
+                st.dataframe(tabel_data)
