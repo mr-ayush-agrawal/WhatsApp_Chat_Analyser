@@ -23,16 +23,9 @@ if ChatFile is not None:
     stats = fetch_stats(selected, Chats)
 
     if st.sidebar.button("Analyse") :
-        cols = st.columns(5)
-        with cols[0] :
-            st.header("Total Messages")
-            st.title(stats[0])
-        with cols[1] :
-            st.header("Total Words Typed")
-            st.title(stats[1])
-        with cols[2]:
-            st.header('Media Files Shared')
-            st.title(stats[2])
-        with cols[3]:
-            st.header('Links Shared')
-            st.title(stats[3])
+        heads = ["Total Messages","Total Words Typed",'Media Files Shared','Links Shared']
+        cols = st.columns(len(heads))
+        for i in range(len(heads)) :
+            with cols[i] :
+                st.header(heads[i])
+                st.title(stats[i])
