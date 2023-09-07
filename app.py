@@ -1,6 +1,7 @@
 import streamlit as st
+import matplotlib.pyplot as plt
 import preprocess
-from helper import fetch_stats
+from helper import fetch_stats, busyUsers
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -29,3 +30,15 @@ if ChatFile is not None:
             with cols[i] :
                 st.header(heads[i])
                 st.title(stats[i])
+
+        # Most Active users -> Only for group Chat
+        if selected == 'Overall' :
+            st.title('Top Chatist Users :')
+            busy = busyUsers(Chats)
+            # Making 2 Section -> For chart and Table
+            chart_col, table_col = st.columns(2)
+            with chart_col :
+                fig, ax = plt.subplots()
+                ax.bar(busy.index, busy.values)
+                plt.xticks(rotation=60)
+                st.pyplot(fig)

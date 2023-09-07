@@ -29,3 +29,7 @@ def fetch_stats(user, chats):
     num_links = linkCt(df)
 
     return (num_messages, num_words,num_media,num_links)
+
+def busyUsers(Chat, count_size=7):
+    BusyUsers  = Chat.Sender.value_counts().head(count_size)
+    return BusyUsers
