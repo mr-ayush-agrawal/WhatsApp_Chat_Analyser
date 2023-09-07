@@ -30,4 +30,7 @@ if ChatFile is not None:
         with cols[1] :
             st.header("Total Words Typed")
             st.title(stats[1])
+        with cols[2]:
+            st.header('Media Files Shared')
+            st.title(stats[2])
         

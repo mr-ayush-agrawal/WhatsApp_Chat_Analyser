@@ -7,6 +7,7 @@ def wrdCt(chats):
 def fetch_stats(user, chats):
     # 1. Number of message
     # 2. Total Words typed 
+    # 3. Media omited
     if user!= 'Overall':
         df = chats[chats['Sender']==user]
     else :
@@ -16,5 +17,6 @@ def fetch_stats(user, chats):
 
     num_messages = df.shape[0]
     num_words = wrdCt(df)
+    num_media = len(df[df.Message == '<Media omitted>\n'])
 
-    return (num_messages, num_words)
+    return (num_messages, num_words,num_media)
