@@ -23,9 +23,12 @@ def fetch_stats(user, chats):
 
     # df is the dataframe to be analysed
 
+    num_media = len(df[df.Message == '<Media omitted>\n'])
+    # Removing the Media from the data
+    df.drop(df[df.Message == '<Media omitted>\n'].index, inplace= True)
+
     num_messages = df.shape[0]
     num_words = wrdCt(df)
-    num_media = len(df[df.Message == '<Media omitted>\n'])
     num_links = linkCt(df)
 
     return (num_messages, num_words,num_media,num_links)
