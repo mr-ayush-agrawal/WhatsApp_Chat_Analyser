@@ -1,4 +1,5 @@
 # Removing all chat files for privacy
 *Chat.txt
+*Chat.csv
 # Removing the cache Files
 __pycache__
