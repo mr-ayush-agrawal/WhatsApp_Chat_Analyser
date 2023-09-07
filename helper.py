@@ -23,9 +23,9 @@ def fetch_stats(user, chats):
 
     # df is the dataframe to be analysed
 
-    num_media = len(df[df.Message == '<Media omitted>\n'])
+    num_media = len(df[df.Message == '<media omitted>\n'])
     # Removing the Media from the data
-    df.drop(df[df.Message == '<Media omitted>\n'].index, inplace= True)
+    df.drop(df[df.Message == '<media omitted>\n'].index, inplace= True)
 
     num_messages = df.shape[0]
     num_words = wrdCt(df)
@@ -45,8 +45,8 @@ def create_wordCloud(chats, user):
         chats = chats[chats['Sender']==user]
     
     # Removing all media the 
-    chats.drop(chats[chats.Message == '<Media omitted>\n'].index, inplace= True)
+    chats.drop(chats[chats.Message == '<media omitted>\n'].index, inplace= True)
 
-    wc = WordCloud(height=400, width=500, min_font_size=12, background_color='white')
+    wc = WordCloud(height=360, width=550, min_font_size=12, background_color='white')
     wrdlcd = wc.generate(chats['Message'].str.cat(sep=' '))
     return wrdlcd
