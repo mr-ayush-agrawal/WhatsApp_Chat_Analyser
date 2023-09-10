@@ -52,8 +52,8 @@ if ChatFile is not None:
         ax.imshow(wrdcld)
         st.pyplot(fig)
 
-        # Most Common Words
-        st.header('Most Common Words')
+        # Most Common Words 
+        st.title('Most Common Words')
         word_count = most_common(Chats, selected)
         word_count = DataFrame(word_count.most_common(25))
         word_count.rename(columns={0:'Words', 1:'Frequency'}, inplace= True)
