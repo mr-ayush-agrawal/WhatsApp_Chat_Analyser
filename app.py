@@ -2,7 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
 from pandas import DataFrame
-from helper import fetch_stats, busyUsers, create_wordCloud,most_common
+from helper import fetch_stats, busyUsers, create_wordCloud,most_common,emoji_analysis
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -61,3 +61,17 @@ if ChatFile is not None:
         fig,ax = plt.subplots()
         ax.barh(word_count['Words'],word_count['Frequency'])
         st.pyplot(fig)
+
+        # Analysing emojis used
+        emoji_df = emoji_analysis(Chats, selected)
+        st.title("Emojis Used :")
+        cols = st.columns(2)
+        with cols[1] :
+            st.dataframe(emoji_df)
+        with cols[0] :
+            fig, ax = plt.subplots()
+            ct = emoji_df.head(10)
+            ct.iloc[9,0]='Other'
+            ct.iloc[9,1]=sum(emoji_df[1][9:])
+            ax.pie(ct[1],labels=ct[0],autopct="%0.2f",textprops={'fontsize': 7})
+            st.pyplot(fig)

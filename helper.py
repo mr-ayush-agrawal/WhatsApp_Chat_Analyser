@@ -1,3 +1,6 @@
+from collections import Counter
+from pandas import DataFrame
+
 def wrdCt(chats):
     wrds = []
     for msg in chats.Message :
@@ -66,6 +69,21 @@ def most_common(chats, user):
         for wrd in str(msg).lower().split():
             if wrd not in stpwrds:
                 words.append(wrd)
-    from collections import Counter
     ct = Counter(words)
     return ct
+
+def emoji_analysis(chats, user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    import emoji
+    used_emojis= []
+    for msg in chats.Message :
+        for ch in str(msg):
+            if emoji.is_emoji(ch):
+                used_emojis.append(ch)
+    emoji_count = Counter(used_emojis)
+    emoji_count
+
+    used_emojis=DataFrame(emoji_count.most_common(len(emoji_count)), index=range(len(emoji_count)))
+    return used_emojis
