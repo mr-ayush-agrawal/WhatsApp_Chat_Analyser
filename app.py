@@ -2,7 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
 from pandas import DataFrame
-from helper import fetch_stats, busyUsers, create_wordCloud,most_common,emoji_analysis
+from helper import fetch_stats, busyUsers, create_wordCloud,most_common,emoji_analysis, monthlyTimeline
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -67,7 +67,7 @@ if ChatFile is not None:
         st.title("Emojis Used :")
         cols = st.columns(2)
         with cols[1] :
-            st.dataframe(emoji_df)
+            st.dataframe(emoji_df.rename(columns={0:'Emojis',1:'Count'}))
         with cols[0] :
             fig, ax = plt.subplots()
             ct = emoji_df.head(10)
@@ -75,3 +75,12 @@ if ChatFile is not None:
             ct.iloc[9,1]=sum(emoji_df[1][9:])
             ax.pie(ct[1],labels=ct[0],autopct="%0.2f",textprops={'fontsize': 7})
             st.pyplot(fig)
+
+        # Alaysing the time
+        st.title("Monthly Timeline")
+        timeline = monthlyTimeline(Chats, selected)
+        fig, ax = plt.subplots()
+        ax.plot(timeline.Time, timeline.Message, c='#fb8b24')
+        plt.xticks(rotation=90)
+        plt.title("Message sent timeline")
+        st.pyplot(fig)

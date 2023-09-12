@@ -87,3 +87,19 @@ def emoji_analysis(chats, user):
 
     used_emojis=DataFrame(emoji_count.most_common(len(emoji_count)), index=range(len(emoji_count)))
     return used_emojis
+
+def monthlyTimeline(chats, user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    timeline = chats.groupby(['Year','Month']).count()['Message'].reset_index()
+    month_order = {'January':1,'February':2,'March':3,'April':4,'May':5,'June':6,'July':7,'August':8,'September':9,'October':10,'November':11,'December':12}
+    timeline['Month_num'] = timeline.Month.map(month_order)
+    timeline.sort_values(by=['Year','Month_num'],inplace=True)
+    timeline.reset_index(inplace=True,drop=True)
+
+    time = []
+    for i in range(timeline.shape[0]):
+        time.append(str(timeline.Year.iloc[i])+" - "+str(timeline.Month.iloc[i]))
+    timeline['Time'] = time
+    return timeline
