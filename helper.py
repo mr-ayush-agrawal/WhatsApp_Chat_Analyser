@@ -113,3 +113,18 @@ def dailyTimeline(chats, user):
     DailyCount['Date']= [x.strftime("%d-%m-%y") for x in DailyCount.Date]
     return DailyCount
     
+def Activity(chats, user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    wk = chats.groupby('WeekDay').count()['Message'].reset_index()
+    wkct = {'Sunday':0, 'Monday':1, 'Tuesday':2, 'Wednesday':3 , 'Thursday':4, 'Friday':5, 'Saturday':6}
+    wk['DayN'] = wk['WeekDay'].map(wkct)
+    wk = wk.sort_values(by = 'DayN')
+    wk.drop(columns = 'DayN', inplace= True)
+    wk.reset_index(drop=True,inplace= True)
+
+    mn = chats.groupby('Month').count()['Message'].reset_index()
+    mn.reset_index(drop=True,inplace= True)
+
+    return wk,mn

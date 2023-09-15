@@ -98,5 +98,19 @@ if ChatFile is not None:
         plt.xticks(rotation = 60)
         plt.title("Daily TimeLine")
         st.pyplot(fig)
-        st.dataframe(timeline)
-        
+
+        # WeekDays, Monthly Activity Map
+        weekMap, MonthMap = helper.Activity(Chats, selected)
+        st.title("Weekly Activity Map")
+        cols = st.columns(2)
+        with cols[0] :
+            st.header("Weekly Activity")
+            fig, ax = plt.subplots()
+            ax.barh(weekMap['WeekDay'].values,weekMap['Message'],color='#313131')
+            st.pyplot(fig)
+        with cols[1]:
+            st.header("Monthly Activity")
+            fig, ax = plt.subplots()
+            ax.barh(MonthMap['Month'].values,MonthMap['Message'],color='#c9cba3')
+            st.pyplot(fig)
+

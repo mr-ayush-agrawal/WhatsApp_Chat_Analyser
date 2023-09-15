@@ -33,6 +33,9 @@ def PreProcess(Chats):
     Data['Day'] = Data['Stamp'].dt.day
     Data['Hour'] = Data['Stamp'].dt.hour
     Data['Minute'] = Data['Stamp'].dt.minute
+
+    Data['Date'] = pd.to_datetime(Data['Year'].astype(str)+ '-' + Data['Month'].astype(str) + '-' + Data['Day'].astype(str))
+    Data['WeekDay'] = Data['Date'].dt.day_name()
     Data.drop('Stamp', axis=1, inplace=True)
 
     return Data
