@@ -2,7 +2,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
 from pandas import DataFrame
-from helper import fetch_stats, busyUsers, create_wordCloud,most_common,emoji_analysis, monthlyTimeline
+import numpy as np
+import helper
 
 st.sidebar.title("WhatsApp Chat analyser")
 ChatFile = st.sidebar.file_uploader("Select a chat", type='txt')
@@ -22,7 +23,7 @@ if ChatFile is not None:
 
     selected = st.sidebar.selectbox("Analysis wrt", users)
 
-    stats = fetch_stats(selected, Chats)
+    stats = helper.fetch_stats(selected, Chats)
 
     if st.sidebar.button("Analyse") :
         heads = ["Total Messages","Total Words Typed",'Media Files Shared','Links Shared']
@@ -35,7 +36,7 @@ if ChatFile is not None:
         # Most Active users -> Only for group Chat
         if selected == 'Overall' :
             st.title('Top Chatist Users :')
-            chart_data, tabel_data = busyUsers(Chats)
+            chart_data, tabel_data = helper.busyUsers(Chats)
             # Making 2 Section -> For chart and Table
             chart_col, table_col = st.columns(2)
             with chart_col :
@@ -47,14 +48,14 @@ if ChatFile is not None:
                 st.dataframe(tabel_data)
 
         st.title("Word Cloud :")
-        wrdcld = create_wordCloud(Chats, selected)
+        wrdcld = helper.create_wordCloud(Chats, selected)
         fig, ax = plt.subplots()
         ax.imshow(wrdcld)
         st.pyplot(fig)
 
         # Most Common Words 
         st.title('Most Common Words')
-        word_count = most_common(Chats, selected)
+        word_count = helper.most_common(Chats, selected)
         word_count = DataFrame(word_count.most_common(25))
         word_count.rename(columns={0:'Words', 1:'Frequency'}, inplace= True)
 
@@ -63,7 +64,7 @@ if ChatFile is not None:
         st.pyplot(fig)
 
         # Analysing emojis used
-        emoji_df = emoji_analysis(Chats, selected)
+        emoji_df = helper.emoji_analysis(Chats, selected)
         st.title("Emojis Used :")
         cols = st.columns(2)
         with cols[1] :
@@ -78,9 +79,24 @@ if ChatFile is not None:
 
         # Alaysing the time
         st.title("Monthly Timeline")
-        timeline = monthlyTimeline(Chats, selected)
+        timeline = helper.monthlyTimeline(Chats, selected)
         fig, ax = plt.subplots()
         ax.plot(timeline.Time, timeline.Message, c='#fb8b24')
         plt.xticks(rotation=90)
         plt.title("Message sent timeline")
         st.pyplot(fig)
+
+        # Daily Timeline
+        st.title("Daily Timeline")
+        timeline = helper.dailyTimeline(Chats, selected)
+        fig,ax = plt.subplots(figsize=(12,8))
+        from datetime import date
+        ax.plot(timeline.Date, timeline.Message, c= 'g')
+        # plt.locator_params(axis='x', nbins =10)
+        xmin, xmax = ax.get_xlim()
+        ax.set_xticks(np.round(np.linspace(xmin, xmax),15))
+        plt.xticks(rotation = 60)
+        plt.title("Daily TimeLine")
+        st.pyplot(fig)
+        st.dataframe(timeline)
+        

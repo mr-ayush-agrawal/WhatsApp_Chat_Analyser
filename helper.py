@@ -1,5 +1,5 @@
 from collections import Counter
-from pandas import DataFrame
+import pandas as pd
 
 def wrdCt(chats):
     wrds = []
@@ -85,7 +85,7 @@ def emoji_analysis(chats, user):
     emoji_count = Counter(used_emojis)
     emoji_count
 
-    used_emojis=DataFrame(emoji_count.most_common(len(emoji_count)), index=range(len(emoji_count)))
+    used_emojis= pd.DataFrame(emoji_count.most_common(len(emoji_count)), index=range(len(emoji_count)))
     return used_emojis
 
 def monthlyTimeline(chats, user):
@@ -103,3 +103,13 @@ def monthlyTimeline(chats, user):
         time.append(str(timeline.Year.iloc[i])+" - "+str(timeline.Month.iloc[i]))
     timeline['Time'] = time
     return timeline
+
+def dailyTimeline(chats, user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    chats['Date'] = pd.to_datetime(chats['Year'].astype(str)+ '-' + chats['Month'].astype(str) + '-' + chats['Day'].astype(str))
+    DailyCount = chats.groupby(chats.Date).count()['Message'].reset_index()
+    DailyCount['Date']= [x.strftime("%d-%m-%y") for x in DailyCount.Date]
+    return DailyCount
+    
