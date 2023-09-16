@@ -128,3 +128,15 @@ def Activity(chats, user):
     mn.reset_index(drop=True,inplace= True)
 
     return wk,mn
+
+
+def chat_heatMap(chats,user):
+    if user != 'Overall':
+        chats = chats[chats['Sender']==user]
+
+    htmp = chats.groupby(['WeekDay','Hour']).count()['Message'].reset_index()
+    htmp = htmp.pivot_table(index= 'WeekDay', columns='Hour', values='Message', fill_value=0)
+    return htmp
+    # from seaborn import heatmap
+    # ht = heatmap(htmp,annot = True, cmap = 'gist_gray',linewidths='0.1')
+    # return ht

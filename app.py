@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import preprocess
 from pandas import DataFrame
+from seaborn import heatmap
 import numpy as np
 import helper
 
@@ -13,7 +14,7 @@ if ChatFile is not None:
     Chats = byte_data.decode('utf-8')
     # This is a kind of reading the file
     Chats = preprocess.PreProcess(Chats)
-    st.dataframe(Chats)
+    # st.dataframe(Chats)
 
     # Users List
     users = Chats['Sender'].unique().tolist()
@@ -26,6 +27,7 @@ if ChatFile is not None:
     stats = helper.fetch_stats(selected, Chats)
 
     if st.sidebar.button("Analyse") :
+        st.title("Top Stats :")
         heads = ["Total Messages","Total Words Typed",'Media Files Shared','Links Shared']
         cols = st.columns(len(heads))
         for i in range(len(heads)) :
@@ -47,6 +49,7 @@ if ChatFile is not None:
             with table_col :
                 st.dataframe(tabel_data)
 
+        # Making Word Cloud
         st.title("Word Cloud :")
         wrdcld = helper.create_wordCloud(Chats, selected)
         fig, ax = plt.subplots()
@@ -77,6 +80,21 @@ if ChatFile is not None:
             ax.pie(ct[1],labels=ct[0],autopct="%0.2f",textprops={'fontsize': 7})
             st.pyplot(fig)
 
+        # WeekDays, Monthly Activity Map
+        weekMap, MonthMap = helper.Activity(Chats, selected)
+        st.title("Activity Graph")
+        cols = st.columns(2)
+        with cols[0] :
+            st.header("Weekly Activity")
+            fig, ax = plt.subplots()
+            ax.barh(weekMap['WeekDay'].values,weekMap['Message'],color='#313131')
+            st.pyplot(fig)
+        with cols[1]:
+            st.header("Monthly Activity")
+            fig, ax = plt.subplots()
+            ax.barh(MonthMap['Month'].values,MonthMap['Message'],color='#c9cba3')
+            st.pyplot(fig)
+
         # Alaysing the time
         st.title("Monthly Timeline")
         timeline = helper.monthlyTimeline(Chats, selected)
@@ -99,18 +117,10 @@ if ChatFile is not None:
         plt.title("Daily TimeLine")
         st.pyplot(fig)
 
-        # WeekDays, Monthly Activity Map
-        weekMap, MonthMap = helper.Activity(Chats, selected)
-        st.title("Weekly Activity Map")
-        cols = st.columns(2)
-        with cols[0] :
-            st.header("Weekly Activity")
-            fig, ax = plt.subplots()
-            ax.barh(weekMap['WeekDay'].values,weekMap['Message'],color='#313131')
-            st.pyplot(fig)
-        with cols[1]:
-            st.header("Monthly Activity")
-            fig, ax = plt.subplots()
-            ax.barh(MonthMap['Month'].values,MonthMap['Message'],color='#c9cba3')
-            st.pyplot(fig)
-
+        # HeatMap
+        st.title("Activity ")
+        htmp = helper.chat_heatMap(Chats,selected)
+        fig, ax = plt.subplots()
+        ax = heatmap(htmp,annot = True, cmap = 'gist_gray',linewidths='0.1')
+        st.pyplot(fig)
+        st.dataframe(htmp)
