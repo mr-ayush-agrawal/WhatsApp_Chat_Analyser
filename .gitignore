@@ -3,3 +3,6 @@
 *Chat.csv
 # Removing the cache Files
 __pycache__
+
+# Removing the virtual Envoirnment stuff
+venv
