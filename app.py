@@ -62,7 +62,7 @@ if ChatFile is not None:
         word_count = DataFrame(word_count.most_common(25))
         word_count.rename(columns={0:'Words', 1:'Frequency'}, inplace= True)
 
-        fig,ax = plt.subplots()
+        fig,ax = plt.subplots(figsize=(10,5))
         ax.barh(word_count['Words'],word_count['Frequency'])
         st.pyplot(fig)
 
@@ -98,7 +98,7 @@ if ChatFile is not None:
         # Alaysing the time
         st.title("Monthly Timeline")
         timeline = helper.monthlyTimeline(Chats, selected)
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize= (10,4))
         ax.plot(timeline.Time, timeline.Message, c='#fb8b24')
         plt.xticks(rotation=90)
         plt.title("Message sent timeline")
@@ -107,7 +107,7 @@ if ChatFile is not None:
         # Daily Timeline
         st.title("Daily Timeline")
         timeline = helper.dailyTimeline(Chats, selected)
-        fig,ax = plt.subplots(figsize=(12,8))
+        fig,ax = plt.subplots(figsize=(12,5))
         from datetime import date
         ax.plot(timeline.Date, timeline.Message, c= 'g')
         # plt.locator_params(axis='x', nbins =10)
@@ -120,7 +120,7 @@ if ChatFile is not None:
         # HeatMap
         st.title("Activity ")
         htmp = helper.chat_heatMap(Chats,selected)
-        fig, ax = plt.subplots()
+        heatmap_ht = 500
+        fig, ax = plt.subplots(figsize=(20, heatmap_ht / 100))
         ax = heatmap(htmp,annot = True, cmap = 'gist_gray',linewidths='0.1')
         st.pyplot(fig)
-        st.dataframe(htmp)
